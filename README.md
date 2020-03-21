@@ -6,6 +6,9 @@ testing examples `:)`
 
 I've added the majority of the commenting in `CourierInterface`, take a look there first!
 
+Speaking of which, each Courier would need it's own class writing to extend the `CourierInterface`. I've not written
+any concrete classes, but this is an example of how it would be implemented:
+
 ```
 $batch = new Batch;
 
