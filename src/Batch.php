@@ -2,8 +2,7 @@
 
 namespace App;
 
-use App\Exceptions\UnassignedCourierException;
-use Exception;
+use App\Exceptions\UndefinedCourierException;
 
 /**
  * Class Batch
@@ -11,32 +10,59 @@ use Exception;
  */
 class Batch
 {
+    /**
+     * @var CourierInterface|null
+     */
     private $courier;
+
+    /**
+     * @var array
+     */
     private $consignments;
 
+    /**
+     * @param CourierInterface|null $courier
+     */
     public function __construct(?CourierInterface $courier)
     {
         if ($courier) {
-            $this->courier = $courier;
+            $this->setCourier($courier);
         }
 
         $this->consignments = [];
     }
 
+    /**
+     * @param CourierInterface $courier
+     */
     public function setCourier(CourierInterface $courier)
     {
         $this->courier = $courier;
     }
 
+    /**
+     * As per the comments in CourierInterface, this method should potentially catch or bubble up exceptions
+     * from the Courier
+     *
+     * @return bool
+     * @throws UndefinedCourierException
+     */
     public function endBatch() : bool
     {
         if ($this->courier) {
             return $this->courier->dispatchBatch($this);
         }
 
-        throw new UnassignedCourierException;
+        throw new UndefinedCourierException;
     }
 
+    /**
+     * As above, this method should potentially catch or bubble up exceptions from the Courier
+     *
+     * @param Consignment $consignment
+     * @return array
+     * @throws UndefinedCourierException
+     */
     public function addConsignment(Consignment $consignment) : array
     {
         if ($this->courier) {
@@ -47,7 +73,7 @@ class Batch
             return $this->consignments;
         }
 
-        throw new UnassignedCourierException;
+        throw new UndefinedCourierException;
     }
 
 }
