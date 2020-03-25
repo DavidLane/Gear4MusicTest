@@ -10,14 +10,12 @@ Speaking of which, each Courier would need it's own class writing to extend the 
 any concrete classes, but this is an example of how it would be implemented:
 
 ```
-$batch = new Batch;
-
 $courier = new RoyalMailCourier;
+$royalMailDispatcher = new Dispatcher($courier);
 
 $consignment = new Consignment;
 
-$batch->setCourier($courier);
-
-$batch->addConsignment($consignment);
-
-$batch->endBatch();
+$royalMailDispatcher->startBatch();
+$royalMailDispatcher->addConsignment($consignment);
+$royalMailDispatcher->endBatch();
+```
